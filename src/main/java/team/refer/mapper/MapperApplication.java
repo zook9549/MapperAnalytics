@@ -67,6 +67,10 @@ public class MapperApplication {
         url.append(shortenedEmail);
         return url.toString().toLowerCase();
     }
+    @RequestMapping(value = "/{fileName:(?:robots.txt|abuseipdb-verification.html)}")
+    public byte[] proxyFile(HttpServletResponse response, @PathVariable String fileName) throws IOException {
+        return proxy(response, "", fileName);
+    }
 
     @RequestMapping(value = "/{path:(?:admin|scripts|styles|fonts)}/{fileName:.*}")
     public byte[] proxy(HttpServletResponse response, @PathVariable String path, @PathVariable String fileName) throws IOException {
