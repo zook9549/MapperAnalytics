@@ -3,16 +3,17 @@ package team.refer.mapper.application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team.refer.mapper.organization.Organization;
 import team.refer.mapper.organization.OrganizationRepository;
+import team.refer.mapper.organization.OrganizationService;
 import team.refer.mapper.referral.ReferralHistoryRepository;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -20,9 +21,9 @@ import java.util.List;
 public class ApplicationService {
 
     @Autowired
-    public ApplicationService(ApplicationRepository applicationRepository, OrganizationRepository organizationRepository, ReferralHistoryRepository referralHistoryRepository) {
+    public ApplicationService(ApplicationRepository applicationRepository, OrganizationService organizationService, ReferralHistoryRepository referralHistoryRepository) {
         this.applicationRepository = applicationRepository;
-        this.organizationRepository = organizationRepository;
+        this.organizationService = organizationService;
         this.referralHistoryRepository = referralHistoryRepository;
     }
 
@@ -58,7 +59,7 @@ public class ApplicationService {
                               @RequestParam(value = "emailDefaultDomain") String emailDefaultDomain,
                               @RequestParam(value = "defaultApp") boolean defaultApp) {
         Application app = new Application();
-        Organization org = organizationRepository.findByOrgKey(orgKey);
+        Organization org = organizationService.getOrg(orgKey);
         if (org != null) {
             app.setAppKey(appKey);
             app.setDescription(description);
@@ -92,29 +93,22 @@ public class ApplicationService {
         return null;
     }
 
-    public Application getDefaultApplication() {
-        return applicationRepository.findByAppKey(defaultApp);
-    }
-
     public Application getApplicationByKey(String appKey) {
         return applicationRepository.findByAppKey(appKey);
     }
 
-    public Application getDefaultApplication(Organization org) {
-        for (Application application : getAllApps()) {
-            if (application.isDefaultApp() && (org == null || application.getOrganization().equals(org))) {
-                return application;
-            }
-        }
-        return null;
+    public Application getDefaultApplication() {
+        Organization org = organizationService.getDefaultOrganization();
+        return getDefaultApplication(org);
     }
 
+    public Application getDefaultApplication(Organization org) {
+        return applicationRepository.findFirstByIsDefaultAppAndOrganization(true, org);
+    }
+
+    private final OrganizationService organizationService;
     private final ApplicationRepository applicationRepository;
-    private final OrganizationRepository organizationRepository;
     private final ReferralHistoryRepository referralHistoryRepository;
 
-    @Value("${app.default}")
-    private String defaultApp;
-
-    static final Logger LOG = LoggerFactory.getLogger(ApplicationService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationService.class);
 }

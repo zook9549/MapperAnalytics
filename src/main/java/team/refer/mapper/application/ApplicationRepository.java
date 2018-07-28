@@ -5,6 +5,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import team.refer.mapper.organization.Organization;
+
+import java.util.Collection;
 
 @Repository
 @EnableCaching
@@ -12,6 +15,10 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
 
     @Cacheable(value = "apps")
     Application findByAppKey(String appKey);
+
+
+    @Cacheable(value = "apps")
+    Application findFirstByIsDefaultAppAndOrganization(boolean isDefaultApp, Organization organization);
 
     @CacheEvict(value = "apps", allEntries = true)
     int deleteAllByAppKey(String appKey);
