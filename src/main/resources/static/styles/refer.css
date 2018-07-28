@@ -35,6 +35,7 @@ form {
 .glyphicon-ok {
     color: darkgreen;
 }
+
 .glyphicon-ok:hover {
     color: seagreen;
 }
@@ -55,9 +56,10 @@ th, td {
 }
 
 th {
-    background-color: lightblue;
+    background-color: lightskyblue;
     font-weight: bold;
     text-align: center;
+    font-size: larger;
 }
 
 .registrantId {
@@ -93,4 +95,42 @@ tr:nth-child(even) {
 
 #barchart_material {
     padding-top: 50px;
+}
+
+.btn {
+    font-size: larger;
+}
+
+.active {
+    font-weight: 500;
+    background-color: #563d7c;
+}
+
+.bd-navbar {
+    background-color: #563d7c;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .05), inset 0 -1px 0 rgba(0, 0, 0, .1);
+}
+
+.bd-navbar .navbar-nav .nav-link.active, .bd-navbar .navbar-nav .nav-link:hover {
+    color: #fff;
+    background-color: transparent;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #cbbde2;
+    font-size: larger;
+}
+
+.navbar-nav a {
+    color: #cbbde2;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+    font-weight: bolder;
+    color: #fff;
+    background-color: #563d7c;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #cbbde2;
 }

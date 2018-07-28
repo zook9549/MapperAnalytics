@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Org Setup</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
     <script src="/scripts/jquery-min.js"></script>
     <script src="/scripts/jquery-ui.min.js"></script>
     <script src="/scripts/jquery.fancybox.min.js"></script>
@@ -10,6 +11,7 @@
     <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/refer.js"></script>
+    <link href="/styles/refer.css" rel="stylesheet"/>
     <script>
 
         $(document).ready(function () {
@@ -108,23 +110,10 @@
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
-    <link href="/styles/refer.css" rel="stylesheet"/>
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-        </div>
-    </div>
-</nav>
+<div id="navContainer" class="container-fluid">
+</div>
 <div id="successAlert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
             aria-hidden="true">&times;</span></button>
