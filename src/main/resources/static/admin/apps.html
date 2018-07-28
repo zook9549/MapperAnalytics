@@ -121,9 +121,11 @@
         }
 
         function removeApp(appKey) {
-            $.getJSON("/removeApp?appKey=" + appKey, function (data) {
-                $('#row' + appKey).css('background-color', 'darkorange').fadeOut('fast');
-            });
+            if(confirm("This will permanently delete this application and all related referrals.")) {
+                $.getJSON("/removeApp?appKey=" + appKey, function (data) {
+                    $('#row' + appKey).css('background-color', 'darkorange').fadeOut('fast');
+                });
+            }
 
         }
     </script>

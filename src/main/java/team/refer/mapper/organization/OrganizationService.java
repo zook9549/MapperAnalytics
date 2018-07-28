@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -51,6 +52,7 @@ public class OrganizationService {
     }
 
     @RequestMapping(value = "/removeOrg")
+    @Transactional
     public Organization removeOrg(@RequestParam(value = "orgKey") String orgKey) {
         Organization org = new Organization();
         org.setOrgKey(orgKey);

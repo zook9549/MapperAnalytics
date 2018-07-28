@@ -80,10 +80,11 @@
         }
 
         function removeOrg(orgKey) {
-            $.getJSON("/removeOrg?orgKey=" + orgKey, function (data) {
-                $('#row' + orgKey).css('background-color','darkorange').fadeOut('fast');
-            });
-
+            if(confirm("This will permanently delete this org, related applications, referrals.")) {
+                $.getJSON("/removeOrg?orgKey=" + orgKey, function (data) {
+                    $('#row' + orgKey).css('background-color', 'darkorange').fadeOut('fast');
+                });
+            }
         }
     </script>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>

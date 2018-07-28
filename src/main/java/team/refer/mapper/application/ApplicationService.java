@@ -26,7 +26,7 @@ public class ApplicationService {
     }
 
     @RequestMapping(value = "/validateUniqueAppKey")
-    public boolean validateUniqueAppKey(@RequestParam(value = "appKey", required = true) String appKey) {
+    public boolean validateUniqueAppKey(@RequestParam(value = "appKey") String appKey) {
         for (Application app : getAllApps()) {
             if (app.getAppKey().equalsIgnoreCase(appKey)) {
                 return false;
