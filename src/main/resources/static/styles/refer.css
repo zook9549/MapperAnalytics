@@ -2,6 +2,7 @@ body {
     font-family: 'Quicksand', sans-serif;
     font-size: large;
 }
+
 form {
     padding-top: 50px;
 }
@@ -10,12 +11,36 @@ form {
     font-size: xx-large;
 }
 
-#deleteAction {
+.glyphicon-pencil {
+    padding-right: 10px;
+    color: darkgreen;
+}
+
+.glyphicon-pencil:hover {
+    color: seagreen;
+}
+
+.glyphicon-remove-sign {
     color: darkred;
 }
 
-#deleteAction:hover {
+.glyphicon-remove-sign:hover {
     color: orangered;
+}
+
+.glyphicon-ok-circle {
+    color: #4cae4c;
+}
+
+.glyphicon-ok {
+    color: darkgreen;
+}
+.glyphicon-ok:hover {
+    color: seagreen;
+}
+
+.glyphicon-remove-circle {
+    color: darkgrey;
 }
 
 #tblRegistrants {
@@ -61,10 +86,11 @@ tr:nth-child(even) {
 
 .alert {
     display: none;
-    position:absolute;
+    position: absolute;
     z-index: 10000;
-    width:100%;
+    width: 100%;
 }
+
 #barchart_material {
     padding-top: 50px;
 }

@@ -76,8 +76,8 @@
                         allOrgs += "</td><td><span class=\"icon glyphicon glyphicon-remove-circle\" title=\"" +
                             data[i].default + "\" aria-hidden=\"true\"></span>"
                     }
-                    allOrgs += "</td><td><a class=\"icon\" href=\"javascript:editOrg('" + data[i].orgKey + "')\">" +
-                        "<span class=\"glyphicon glyphicon-pencil\" id=\"editAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a><a class=\"icon\" id=\"deleteAction\" href=\"javascript:removeOrg('" + data[i].orgKey + "')\">" +
+                    allOrgs += "</td><td><a class=\"icon editAction\" href=\"javascript:editOrg('" + data[i].orgKey + "')\">" +
+                        "<span class=\"glyphicon glyphicon-pencil\" id=\"editAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a><a class=\"icon deleteAction\" href=\"javascript:removeOrg('" + data[i].orgKey + "')\">" +
                         "<span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a>" +
                         "</td></tr>";
                 }
