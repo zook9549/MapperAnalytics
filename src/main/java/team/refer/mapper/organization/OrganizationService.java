@@ -40,14 +40,21 @@ public class OrganizationService {
     }
 
     @RequestMapping(value = "/addOrg")
-    public Organization addOrg(@RequestParam(value = "orgKey") String orgKey, @RequestParam(value = "name") String name, @RequestParam(value = "url") String url) {
+    public Organization addOrg(@RequestParam(value = "orgKey") String orgKey,
+                               @RequestParam(value = "name") String name,
+                               @RequestParam(value = "url") String url,
+                               @RequestParam(value = "default") boolean defaultOrg) {
         Organization org = new Organization();
-        if (validateUniqueOrgKey(orgKey)) {
-            org.setOrgKey(orgKey.toUpperCase());
-            org.setName(name);
-            org.setUrl(url);
-            organizationRepository.save(org);
+        org.setOrgKey(orgKey.toUpperCase());
+        org.setName(name);
+        org.setUrl(url);
+        org.setDefault(defaultOrg);
+        if(defaultOrg) {
+            Organization oldDefault = getDefaultOrganization();
+            oldDefault.setDefault(false);
+            organizationRepository.save(oldDefault);
         }
+        organizationRepository.save(org);
         return org;
     }
 

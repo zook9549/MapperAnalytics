@@ -19,18 +19,19 @@
                 e.preventDefault();
                 var orgKey = $("#frmOrg")[0].orgKey.value;
                 $.ajax({
-                    url: '/addOrg?orgKey=' + orgKey + "&name=" + $("#frmOrg")[0].orgName.value + "&url=" + encodeURIComponent($("#frmOrg")[0].orgURL.value),
+                    url: '/addOrg?orgKey=' + orgKey + "&name=" + $("#frmOrg")[0].orgName.value + "&url=" + encodeURIComponent($("#frmOrg")[0].orgURL.value)
+                    + "&default=" + $("#frmOrg")[0].orgDefault.checked,
                     method: "GET",
                     dataType: 'json',
                     processData: false,
                     contentType: false,
                     success: function (result) {
-                       // $("#successAlert").fadeIn(500).fadeOut(2000);
+                        // $("#successAlert").fadeIn(500).fadeOut(2000);
                         getAllOrgs(orgKey);
                         $("#frmOrg")[0].reset();
                     },
                     error: function (er) {
-                         $("#errorAlert").fadeIn(500).fadeOut(2000);
+                        $("#errorAlert").fadeIn(500).fadeOut(2000);
                     }
                 });
 
@@ -67,10 +68,20 @@
                     allOrgs += "<tr id='row" + data[i].orgKey + "'>" +
                         "<td>" + data[i].orgKey
                         + "</td><td>" + data[i].name
-                        + "</td><td>" + data[i].url
-                        + "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:removeOrg('" + data[i].orgKey + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a></td></tr>";
+                        + "</td><td>" + data[i].url;
+                    if (data[i].default) {
+                        allOrgs += "</td><td><span class=\"icon glyphicon glyphicon-ok-circle\" title=\"" +
+                            data[i].default + "\" aria-hidden=\"true\"></span>"
+                    } else {
+                        allOrgs += "</td><td><span class=\"icon glyphicon glyphicon-remove-circle\" title=\"" +
+                            data[i].default + "\" aria-hidden=\"true\"></span>"
+                    }
+                    allOrgs += "</td><td><a class=\"icon\" href=\"javascript:editOrg('" + data[i].orgKey + "')\">" +
+                        "<span class=\"glyphicon glyphicon-pencil\" id=\"editAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a><a class=\"icon\" id=\"deleteAction\" href=\"javascript:removeOrg('" + data[i].orgKey + "')\">" +
+                        "<span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a>" +
+                        "</td></tr>";
                 }
-                orgList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Key</th><th>Name</th><th>URL</th><th>Actions</th></tr>"
+                orgList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Key</th><th>Name</th><th>URL</th><th>Default?</th><th>Actions</th></tr>"
                     + allOrgs + "</table>";
                 if (orgKey) {
                     $('#row' + orgKey).effect("pulsate", {times: 4}, 400);
@@ -79,8 +90,18 @@
             });
         }
 
+        function editOrg(orgKey) {
+            $('#row' + orgKey).each(function () {
+                $("#frmOrg")[0].orgKey.value = $(this).find('td').eq(0).text();
+                $("#frmOrg")[0].orgName.value = $(this).find('td').eq(1).text();
+                $("#frmOrg")[0].orgURL.value = $(this).find('td').eq(2).text()
+                var isTrueSet = ($(this).find('td').eq(3).find('span').eq(0).attr("title") === 'true');
+                $("#orgDefault").prop("checked", isTrueSet)
+            });
+        }
+
         function removeOrg(orgKey) {
-            if(confirm("This will permanently delete this org, related applications, referrals.")) {
+            if (confirm("This will permanently delete this org, related applications, referrals.")) {
                 $.getJSON("/removeOrg?orgKey=" + orgKey, function (data) {
                     $('#row' + orgKey).css('background-color', 'darkorange').fadeOut('fast');
                 });
@@ -138,13 +159,14 @@
                        placeholder="URL for more information on the organization referral program"
                        class="form-control"/>
             </div>
-            <!--            <div id="orgDefaultContainer" class="input-group input-group-lg">
-                            <label for="orgDefault" class="sr-only">Site Default</label>
-                            <span class="input-group-addon" id="basic-addon4">Site Default</span>
-                            <input type="checkbox" name="orgDefault" id="orgDefault"
-                                   placeholder="Check to make this the refer site default"
-                                   class="form-control"/>
-                        </div>-->
+
+            <div id="orgDefaultContainer" class="input-group input-group-lg">
+                <span class="input-group-addon" id="basic-addon5">Site Default?</span>
+                <input type="checkbox" name="orgDefault" id="orgDefault"
+                       placeholder="Check to make this the default organization for the site "
+                       class="form-control" style="width:100px;"/>
+                <label for="orgDefault" class="sr-only">Site Default?</label>
+            </div>
             <div class="btnContainer text-center">
                 <button class="btn btn-lg btn-primary btn-block" value="Add Org" id="submitButton">Add Org
                 </button>
