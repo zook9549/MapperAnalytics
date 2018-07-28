@@ -32,7 +32,6 @@
                         "<td>" + data[i].ip
                         + "</td><td>" + data[i].created
                         + "</td><td>" + data[i].whiteListed;
-                    console.log(data[i].whiteListed);
                     if(data[i].whiteListed) {
                         allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"></span></a></td></tr>";
                     } else {
@@ -42,7 +41,6 @@
                 haxorList.innerHTML = "<br/><br/><br/><table class=\"table\" id='tblRegistrants'><tr><th>IP</th><th>Created</th><th>Whitelisted?</th><th>Actions</th></tr>"
                     + allHaxors + "</table>";
                 if (ip) {
-                    console.log(ip)
                     $('#row' + ip.replace(/\./g,'')).effect("pulsate", {times: 4}, 400);
                 }
             });

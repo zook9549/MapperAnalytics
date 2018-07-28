@@ -57,15 +57,17 @@ public class ApplicationService {
                               @RequestParam(value = "emailDefaultDomain") String emailDefaultDomain,
                               @RequestParam(value = "defaultApp") boolean defaultApp) {
         Application app = new Application();
-        Organization org = organizationService.getOrg(orgKey);
-        if (org != null) {
-            app.setAppKey(appKey);
-            app.setDescription(description);
-            app.setUrl(url);
-            app.setDefaultApp(defaultApp);
-            app.setEmailDefaultDomain(emailDefaultDomain);
-            app.setOrganization(org);
-            applicationRepository.save(app);
+        if (appKey != null && !appKey.equals("")) {
+            Organization org = organizationService.getOrg(orgKey);
+            if (org != null) {
+                app.setAppKey(appKey);
+                app.setDescription(description);
+                app.setUrl(url);
+                app.setDefaultApp(defaultApp);
+                app.setEmailDefaultDomain(emailDefaultDomain);
+                app.setOrganization(org);
+                applicationRepository.save(app);
+            }
         }
         return app;
     }

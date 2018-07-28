@@ -16,12 +16,11 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     @Cacheable(value = "apps")
     Application findByAppKey(String appKey);
 
-
     @Cacheable(value = "apps")
     Application findFirstByIsDefaultAppAndOrganization(boolean isDefaultApp, Organization organization);
 
     @CacheEvict(value = "apps", allEntries = true)
-    int deleteAllByAppKey(String appKey);
+    void delete(Application application);
 
     @Override
     @CacheEvict(value = "apps", allEntries = true)
