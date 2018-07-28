@@ -49,12 +49,12 @@ public class OrganizationService {
         org.setName(name);
         org.setUrl(url);
         org.setDefault(defaultOrg);
+        organizationRepository.save(org);
         if(defaultOrg) {
             Organization oldDefault = getDefaultOrganization();
             oldDefault.setDefault(false);
             organizationRepository.save(oldDefault);
         }
-        organizationRepository.save(org);
         return org;
     }
 
