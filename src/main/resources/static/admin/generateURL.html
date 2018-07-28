@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate URL</title>
+    <script src="/scripts/jquery-min.js"></script>
+    <script src="/scripts/jquery-ui.min.js"></script>
+    <script src="/scripts/jquery.fancybox.min.js"></script>
+    <link href="/styles/jquery.fancybox.min.css" rel="stylesheet"/>
+    <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/refer.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            buildNav();
+            getAllApps();
+        });
+
+        function getAllApps() {
+            $.getJSON("/getAllApps", function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $('#appKey')
+                        .append($("<option></option>")
+                            .attr("value", data[i].appKey)
+                            .text(data[i].description).attr("selected", data[i].defaultApp));
+                }
+
+            });
+        }
+
+        function generateURL(form) {
+            $.ajax({
+                url: "/generateVanityURL?email=" + form.email.value + "&app=" + form.appKey.value,
+                method: "GET",
+                dataType: 'text',
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    console.log(result)
+                    form.appURL.value = result;
+                    form.appURL.select();
+                }
+            });
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
+    <link href="/styles/refer.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+        </div>
+    </div>
+</nav>
+<form id="frmApp" role="form" method="post" action="/generateVanityURL">
+    <div id="generateURL">
+        <div class="form-group">
+            <div id="appKeyContainer" class="input-group input-group-lg">
+                <label for="appKey" class="sr-only">Application</label>
+                <span class="input-group-addon" id="basic-addon">Application</span>
+                <select class="custom-select form-control" id="appKey">
+                </select>
+            </div>
+            <div id="emailContainer" class="input-group input-group-lg">
+                <label for="email" class="sr-only">Email</label>
+                <span class="input-group-addon" id="basic-addon4b">Email</span>
+                <input type="text" name="email" id="email"
+                       placeholder="Email address of the referrer"
+                       class="form-control"/>
+            </div>
+            <div id="appURLContainer" class="input-group input-group-lg">
+                <div class="input-group-prepend input-group-addon">
+                    <button class="btn btn-lg btn-primary btn-group-justified" type="button"
+                            onclick="generateURL(this.form)">Generate URL
+                    </button>
+                </div>
+                <input type="text" name="appURL" id="appURL" aria-label=""
+                       placeholder="Your personalized referral URL"
+                       class="form-control" style="height:75px;" readonly="true"/>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

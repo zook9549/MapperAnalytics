@@ -1,0 +1,70 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+    font-size: large;
+}
+form {
+    padding-top: 50px;
+}
+
+.icon {
+    font-size: xx-large;
+}
+
+#deleteAction {
+    color: darkred;
+}
+
+#deleteAction:hover {
+    color: orangered;
+}
+
+#tblRegistrants {
+    text-align: center;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: lightblue;
+    font-weight: bold;
+    text-align: center;
+}
+
+.registrantId {
+    vertical-align: middle;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.btnContainer input {
+    width: 170px;
+    background-color: darkgreen;
+    color: white;
+    font-size: 16px;
+}
+
+.input-group-addon {
+    min-width: 205px;
+    text-align: left;
+}
+
+.btnContainer {
+    margin: 10px;
+}
+
+.alert {
+    display: none;
+    position:absolute;
+    z-index: 10000;
+    width:100%;
+}
+#barchart_material {
+    padding-top: 50px;
+}

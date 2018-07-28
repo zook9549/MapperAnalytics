@@ -1,0 +1,151 @@
+<html>
+<head>
+    <title>Site Statistics</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/scripts/jquery-min.js"></script>
+    <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/refer.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['bar', 'line','corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(drawChartBySourceIP());
+        google.charts.setOnLoadCallback(drawReferrersByApp());
+
+        $(document).ready(function () {
+            buildNav();
+            drawChart();
+            drawChartBySourceIP();
+            drawReferrersByApp();
+        });
+
+        function drawChart() {
+            $.ajax({
+                url: "/getTopReferrers?maxRecords=10",
+                dataType: "json",
+                success: function (jsonData) {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'User');
+                    data.addColumn('number', 'Referrals');
+
+                    for (var i = 0; i < jsonData.length; i++) {
+                        data.addRow([jsonData[i].identifierGroup, jsonData[i].count]);
+                    }
+                    var options = {
+                        chart: {
+                            title: 'Top 10 Referring Users',
+                            subtitle: 'Year-to-date',
+                        },
+                        bars: 'vertical' // Required for Material Bar Charts.
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+                    chart.draw(data, options);
+                }
+            });
+        }
+
+        function drawChartBySourceIP() {
+            $.ajax({
+                url: "/getTopReferrersByIPAddress?maxRecords=10",
+                dataType: "json",
+                success: function (jsonData) {
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Source IP Address');
+                    data.addColumn('number', 'Referrals');
+
+                    for (var i = 0; i < jsonData.length; i++) {
+                        data.addRow([jsonData[i].identifierGroup, jsonData[i].count]);
+                    }
+                    var options = {
+                        chart: {
+                            title: 'Top 10 Referring IP Addresses',
+                            subtitle: 'Year-to-date',
+                        },
+                        bars: 'vertical'
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('barchart_ip'));
+
+                    chart.draw(data, options);
+                }
+            });
+        }
+
+        var apps = [];
+        function drawReferrersByApp() {
+            $.ajax({
+                url: "/getReferrersByApp?start=2010-07-22&groupByDay=false",
+                dataType: "json",
+                success: function (jsonData) {
+                    var data = new google.visualization.DataTable();
+                    console.log(jsonData.length)
+                    data.addColumn('date', 'Referral Date');
+                    for (var i = 0; i < jsonData[0].groupReferralCounts.length; i++) {
+                        apps[i] = jsonData[0].groupReferralCounts[i].identifierGroup;
+                        console.log(jsonData[0].groupReferralCounts[i].identifierGroup);
+                        data.addColumn('number', jsonData[0].groupReferralCounts[i].identifierGroup);
+                    }
+                    data.addRows(jsonData.length);
+                    for (var i = 0; i < jsonData.length; i++) {
+                        console.log(jsonData[i]);
+                        data.setCell(i, 0, new Date(jsonData[i].referDate))
+                        for (var j = 0; j < jsonData[i].groupReferralCounts.length; j++) {
+                            console.log(i + ":" + j + "=" + jsonData[i].groupReferralCounts[j].count)
+                            data.setCell(i, apps.indexOf(jsonData[i].groupReferralCounts[j].identifierGroup)+1, jsonData[i].groupReferralCounts[j].count)
+                        }
+                    }
+                    var options = {
+                        hAxis: {
+                            title: 'Day',
+                            showTextEvery: 1,
+                            format: 'HH:mm'
+                        },
+                        bar: {groupWidth: '95%'},
+                        vAxis: {
+                            title: '# of Referrals',
+                            gridlines: {count: 4}
+                        },
+                        explorer: {},
+                        backgroundColor: '#FFFFFF',
+                        height: 700,
+                        title: 'Referrals by Application',
+                        chart: {
+                            title: 'Referrals by Application',
+                            subtitle: 'Grouped by Day'
+                        },
+                        animation: {
+                            duration: 200,
+                            easing: 'out',
+                            startup: "true"
+                        }
+                    };
+                    var chart =new google.visualization.LineChart(document.getElementById('linechart_material'));
+
+                    chart.draw(data, options);
+                }
+            });
+        }
+
+
+    </script>
+    <link href="/styles/refer.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+        </div>
+    </div>
+</nav>
+<div id="barchart_material" style="width: 900px; height: 500px;">LOADING</div>
+<div id="barchart_ip" style="width: 900px; height: 500px;">LOADING</div>
+<div id="linechart_material" style="width: 900px; height: 500px;">LOADING</div>
+</body>
+</html>

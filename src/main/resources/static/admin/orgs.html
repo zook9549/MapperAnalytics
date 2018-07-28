@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Org Setup</title>
+    <script src="/scripts/jquery-min.js"></script>
+    <script src="/scripts/jquery-ui.min.js"></script>
+    <script src="/scripts/jquery.fancybox.min.js"></script>
+    <link href="/styles/jquery.fancybox.min.css" rel="stylesheet"/>
+    <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/refer.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            buildNav();
+            getAllOrgs();
+            $('button#submitButton').click(function (e) {
+                e.preventDefault();
+                var orgKey = $("#frmOrg")[0].orgKey.value;
+                $.ajax({
+                    url: '/addOrg?orgKey=' + orgKey + "&name=" + $("#frmOrg")[0].orgName.value + "&url=" + encodeURIComponent($("#frmOrg")[0].orgURL.value),
+                    method: "GET",
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                       // $("#successAlert").fadeIn(500).fadeOut(2000);
+                        getAllOrgs(orgKey);
+                        $("#frmOrg")[0].reset();
+                    },
+                    error: function (er) {
+                         $("#errorAlert").fadeIn(500).fadeOut(2000);
+                    }
+                });
+
+            });
+        });
+
+        function validateUniqueOrgKey(obj) {
+            $.ajax({
+                url: '/validateUniqueOrgKey?orgKey=' + obj.value,
+                method: "GET",
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result) {
+                        $('#orgKey').css('color', 'darkgreen');
+                    } else {
+                        $('#orgKey').css('color', 'red');
+                    }
+                }
+            });
+        }
+
+        var orgs = [];
+        var counter = 0;
+
+        function getAllOrgs(orgKey) {
+            counter = 0;
+            var allOrgs = "";
+            var orgList = document.getElementById('orgs');
+            $.getJSON("/getAllOrgs", function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    orgs[i] = data[i];
+                    allOrgs += "<tr id='row" + data[i].orgKey + "'>" +
+                        "<td>" + data[i].orgKey
+                        + "</td><td>" + data[i].name
+                        + "</td><td>" + data[i].url
+                        + "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:removeOrg('" + data[i].orgKey + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a></td></tr>";
+                }
+                orgList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Key</th><th>Name</th><th>URL</th><th>Actions</th></tr>"
+                    + allOrgs + "</table>";
+                if (orgKey) {
+                    $('#row' + orgKey).effect("pulsate", {times: 4}, 400);
+                }
+
+            });
+        }
+
+        function removeOrg(orgKey) {
+            $.getJSON("/removeOrg?orgKey=" + orgKey, function (data) {
+                $('#row' + orgKey).css('background-color','darkorange').fadeOut('fast');
+            });
+
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
+    <link href="/styles/refer.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+        </div>
+    </div>
+</nav>
+<div id="successAlert" class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+    <div id="successMessage">Success!</div>
+</div>
+<div id="errorAlert" class="alert alert-error alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+    <div id="errorMessage">Failed!</div>
+</div>
+<form id="frmOrg" role="form" method="post" action="/addOrg">
+    <div id="addOrg">
+        <div class="form-group">
+            <div id="orgKeyContainer" class="input-group input-group-lg">
+                <label for="orgKey" class="sr-only">Org Key</label>
+                <span class="input-group-addon" id="basic-addon1">Org Key</span>
+                <input type="text" name="orgKey" id="orgKey" onkeyup="validateUniqueOrgKey(this)"
+                       placeholder="Unique Key used in the custom referral URL"
+                       class="form-control"/>
+            </div>
+            <div id="orgNameContainer" class="input-group input-group-lg">
+                <label for="orgName" class="sr-only">Name</label>
+                <span class="input-group-addon" id="basic-addon2">Name</span>
+                <input type="text" name="orgName" id="orgName"
+                       placeholder="Name of the organization"
+                       class="form-control"/>
+            </div>
+            <div id="orgURLContainer" class="input-group input-group-lg">
+                <label for="orgURL" class="sr-only">Name</label>
+                <span class="input-group-addon" id="basic-addon3">URL</span>
+                <input type="text" name="orgURL" id="orgURL"
+                       placeholder="URL for more information on the organization referral program"
+                       class="form-control"/>
+            </div>
+            <!--            <div id="orgDefaultContainer" class="input-group input-group-lg">
+                            <label for="orgDefault" class="sr-only">Site Default</label>
+                            <span class="input-group-addon" id="basic-addon4">Site Default</span>
+                            <input type="checkbox" name="orgDefault" id="orgDefault"
+                                   placeholder="Check to make this the refer site default"
+                                   class="form-control"/>
+                        </div>-->
+            <div class="btnContainer text-center">
+                <button class="btn btn-lg btn-primary btn-block" value="Add Org" id="submitButton">Add Org
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="orgs"></div>
+
+</body>
+</html>

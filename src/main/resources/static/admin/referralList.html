@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Referral History by Application</title>
+    <script src="/scripts/jquery-min.js"></script>
+    <script src="/scripts/jquery-ui.min.js"></script>
+    <script src="/scripts/jquery.fancybox.min.js"></script>
+    <link href="/styles/jquery.fancybox.min.css" rel="stylesheet"/>
+    <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/refer.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            buildNav();
+            getAllApps();
+        });
+
+        function getAllApps(ctx) {
+            $.getJSON("/getAllApps", function (data) {
+                var isSelected;
+                for (var i = 0; i < data.length; i++) {
+                    var element = $("<option></option>");
+                    element.attr("value", data[i].appKey)
+                        .text(data[i].description);
+                    if (!isSelected && data[i].defaultApp) {
+                        element.attr("selected", data[i].defaultApp);
+                        isSelected = true;
+                        fetchReferrals(data[i].appKey);
+                    }
+                    $('#appKey').append(element);
+                }
+            });
+        }
+
+        var counter = 0;
+
+        function fetchReferrals(appKey) {
+            counter = 0;
+            var allRegistrants = "";
+            var registrantList = document.getElementById('registrantList');
+            $.getJSON("/getReferralsByAppKey?appKey=" + appKey, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    allRegistrants += "<tr id='row" + data[i].mappedMilliseconds + "'><td class='registrantId'>" + data[i].application.description
+                        + "</td><td>" + data[i].mappedTimeStamp
+                        + "</td><td>" + data[i].originalURL
+                        + "</td><td>" + data[i].resultURL
+                        + "</td><td>" + data[i].userName
+                        + "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:removeReferral('" + data[i].application.appKey +
+                        "','" + data[i].mappedMilliseconds + "')\"><span class=\"glyphicon glyphicon-remove-sign\" aria-hidden=\"true\"></span>" +
+                        "</a></td></tr>";
+                }
+                referralList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>App</th><th>Date/Time</th><th>Orignal URL</th>" +
+                    "<th>Result URL</th><th>User</th><th>Actions</th></tr>"
+                    + allRegistrants + "</table>";
+
+            });
+        }
+
+        function removeReferral(appKey, millis) {
+            $.getJSON("/removeReferral?appKey=" + appKey + "&mappedMilliseconds=" + millis, function (data) {
+                $('#row' + millis).css('background-color', 'darkorange').fadeOut('fast');
+            });
+        }
+
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
+    <link href="/styles/refer.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+        </div>
+    </div>
+</nav>
+<div id="successAlert" class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+    <div id="successMessage">Success!</div>
+</div>
+<div id="errorAlert" class="alert alert-error alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+    <div id="errorMessage">Failed!</div>
+</div>
+<form id="frmApp" role="form" method="post" action="/addApp">
+    <div id="addApp">
+        <div class="form-group">
+            <div id="appKeyContainer" class="input-group input-group-lg">
+                <label for="appKey" class="sr-only">Application</label>
+                <span class="input-group-addon" id="basic-addon3">Application</span>
+                <select class="custom-select form-control" id="appKey" onchange="fetchReferrals(this.value)">
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="referralList"></div>
+
+</body>
+</html>
