@@ -45,15 +45,17 @@ public class OrganizationService {
                                @RequestParam(value = "url") String url,
                                @RequestParam(value = "default") boolean defaultOrg) {
         Organization org = new Organization();
-        org.setOrgKey(orgKey.toUpperCase());
-        org.setName(name);
-        org.setUrl(url);
-        org.setDefault(defaultOrg);
-        organizationRepository.save(org);
-        if(defaultOrg) {
-            Organization oldDefault = getDefaultOrganization();
-            oldDefault.setDefault(false);
-            organizationRepository.save(oldDefault);
+        if (orgKey != null && !orgKey.equals("")) {
+            org.setOrgKey(orgKey.toUpperCase());
+            org.setName(name);
+            org.setUrl(url);
+            org.setDefault(defaultOrg);
+            organizationRepository.save(org);
+            if (defaultOrg) {
+                Organization oldDefault = getDefaultOrganization();
+                oldDefault.setDefault(false);
+                organizationRepository.save(oldDefault);
+            }
         }
         return org;
     }
