@@ -20,7 +20,7 @@ public class OrganizationService {
     }
 
     @RequestMapping(value = "/validateUniqueOrgKey")
-    public boolean validateUniqueOrgKey(@RequestParam(value = "orgKey", required = true) String orgKey) {
+    public boolean validateUniqueOrgKey(@RequestParam(value = "orgKey") String orgKey) {
         for (Organization org : getAllOrgs()) {
             if (org.getOrgKey().equalsIgnoreCase(orgKey)) {
                 return false;
@@ -55,17 +55,10 @@ public class OrganizationService {
         return org;
     }
 
-    public Organization getOrganizationByKey(String key) {
-        return organizationRepository.findByOrgKey(key);
-    }
-
-    // todo just get rid of this
     public Organization getDefaultOrganization() {
-        return getOrganizationByKey(defaultOrg);
+        return organizationRepository.findByIsDefault(true).iterator().next();
     }
 
 
     private final OrganizationRepository organizationRepository;
-    @Value("${org.default}")
-    private String defaultOrg;
 }
