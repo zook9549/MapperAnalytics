@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team.refer.mapper.organization.Organization;
-import team.refer.mapper.organization.OrganizationRepository;
 import team.refer.mapper.organization.OrganizationService;
 import team.refer.mapper.referral.ReferralHistoryRepository;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 
 @RestController
