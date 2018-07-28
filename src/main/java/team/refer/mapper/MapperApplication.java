@@ -45,9 +45,6 @@ import java.util.Date;
 @RequestMapping(value = "/")
 public class MapperApplication {
 
-    /*
-        URL is in the format /{org}/{application}/{user}.  Org and application can be removed if default
-         */
     public static void main(String[] args) {
         SpringApplication.run(MapperApplication.class, args);
     }
@@ -115,9 +112,6 @@ public class MapperApplication {
                 mappedParams.addAll(Arrays.asList(params).subList(startIndex + 1, params.length));
                 mappedURL = MessageFormat.format(application.getUrl(), mappedParams.toArray());
                 Context context = new Context();
-                /*ContextKey contextKey = new ContextKey();
-                contextKey.setMappedMilliseconds(millis);
-                contextKey.setApplication(application);*/
                 context.setApplication(application);
                 context.setUserName(user);
                 context.setReferringURL(request.getHeader(HttpHeaders.REFERER));
