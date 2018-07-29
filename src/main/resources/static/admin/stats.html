@@ -8,16 +8,13 @@
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/refer.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages': ['bar', 'line','corechart']});
+        google.charts.load('current', {'packages': ['bar', 'line']});
         google.charts.setOnLoadCallback(drawChart);
-        google.charts.setOnLoadCallback(drawChartBySourceIP());
-        google.charts.setOnLoadCallback(drawReferrersByApp());
+        google.charts.setOnLoadCallback(drawChartBySourceIP);
+        google.charts.setOnLoadCallback(drawReferrersByApp);
 
         $(document).ready(function () {
             buildNav();
-            drawChart();
-            drawChartBySourceIP();
-            drawReferrersByApp();
         });
 
         function drawChart() {
@@ -37,11 +34,14 @@
                             title: 'Top 10 Referring Users',
                             subtitle: 'Year-to-date',
                         },
+                        legend: {
+                            position: "none"
+                        },
                         bars: 'vertical' // Required for Material Bar Charts.
                     };
                     var chart = new google.charts.Bar(document.getElementById('barchart_material'));
 
-                    chart.draw(data, options);
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             });
         }
@@ -63,11 +63,14 @@
                             title: 'Top 10 Referring IP Addresses',
                             subtitle: 'Year-to-date',
                         },
+                        legend: {
+                            position: "none"
+                        },
                         bars: 'vertical'
                     };
                     var chart = new google.charts.Bar(document.getElementById('barchart_ip'));
 
-                    chart.draw(data, options);
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             });
         }
@@ -79,36 +82,25 @@
                 dataType: "json",
                 success: function (jsonData) {
                     var data = new google.visualization.DataTable();
-                    console.log(jsonData.length)
                     data.addColumn('date', 'Referral Date');
                     for (var i = 0; i < jsonData[0].groupReferralCounts.length; i++) {
                         apps[i] = jsonData[0].groupReferralCounts[i].identifierGroup;
-                        console.log(jsonData[0].groupReferralCounts[i].identifierGroup);
                         data.addColumn('number', jsonData[0].groupReferralCounts[i].identifierGroup);
                     }
                     data.addRows(jsonData.length);
                     for (var i = 0; i < jsonData.length; i++) {
-                        console.log(jsonData[i]);
                         data.setCell(i, 0, new Date(jsonData[i].referDate))
                         for (var j = 0; j < jsonData[i].groupReferralCounts.length; j++) {
-                            console.log(i + ":" + j + "=" + jsonData[i].groupReferralCounts[j].count)
                             data.setCell(i, apps.indexOf(jsonData[i].groupReferralCounts[j].identifierGroup)+1, jsonData[i].groupReferralCounts[j].count)
                         }
                     }
                     var options = {
                         hAxis: {
                             title: 'Day',
-                            showTextEvery: 1,
-                            format: 'HH:mm'
+                            slantedText: true
                         },
-                        bar: {groupWidth: '95%'},
                         vAxis: {
-                            title: '# of Referrals',
-                            gridlines: {count: 4}
                         },
-                        explorer: {},
-                        backgroundColor: '#FFFFFF',
-                        height: 700,
                         title: 'Referrals by Application',
                         chart: {
                             title: 'Referrals by Application',
@@ -116,13 +108,15 @@
                         },
                         animation: {
                             duration: 200,
-                            easing: 'out',
-                            startup: "true"
+                            easing: 'inAndOut',
+                        },
+                        tooltip: {
+                            ignoreBounds: true
                         }
                     };
-                    var chart =new google.visualization.LineChart(document.getElementById('linechart_material'));
+                    var chart =new google.charts.Line(document.getElementById('linechart_material'));
 
-                    chart.draw(data, options);
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             });
         }
@@ -134,8 +128,8 @@
 <body>
 <div id="navContainer" class="container-fluid">
 </div>
-<div id="barchart_material" style="width: 900px; height: 500px;">LOADING</div>
-<div id="barchart_ip" style="width: 900px; height: 500px;">LOADING</div>
-<div id="linechart_material" style="width: 900px; height: 500px;">LOADING</div>
+<div id="barchart_material" class="chart" >LOADING</div>
+<div id="barchart_ip" class="chart">LOADING</div>
+<div id="linechart_material" class="chart">LOADING</div>
 </body>
 </html>

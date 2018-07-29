@@ -160,3 +160,8 @@ tr:hover {
     font-weight: bolder;
 
 }
+
+.chart {
+   width: 95%;
+    height: 30%;
+}
