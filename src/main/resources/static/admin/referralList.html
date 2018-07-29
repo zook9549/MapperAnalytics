@@ -43,8 +43,7 @@
             var registrantList = document.getElementById('registrantList');
             $.getJSON("/getReferralsByAppKey?appKey=" + appKey, function (data) {
                 for (var i = 0; i < data.length; i++) {
-                    allRegistrants += "<tr id='row" + data[i].mappedMilliseconds + "'><td class='registrantId'>" + data[i].application.description
-                        + "</td><td>" + data[i].mappedTimeStamp
+                    allRegistrants += "<tr id='row" + data[i].mappedMilliseconds + "'><td>" + data[i].mappedTimeStamp
                         + "</td><td>" + data[i].originalURL
                         + "</td><td>" + data[i].resultURL
                         + "</td><td>" + data[i].userName
@@ -52,7 +51,7 @@
                         "','" + data[i].mappedMilliseconds + "')\"><span class=\"glyphicon glyphicon-remove-sign\" aria-hidden=\"true\"></span>" +
                         "</a></td></tr>";
                 }
-                referralList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>App</th><th>Date/Time</th><th>Original URL</th>" +
+                referralList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Date/Time</th><th>Original URL</th>" +
                     "<th>Result URL</th><th>User</th><th>Actions</th></tr>"
                     + allRegistrants + "</table>";
 
