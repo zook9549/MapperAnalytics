@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Org Setup</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
     <script src="/scripts/jquery-min.js"></script>
@@ -105,8 +105,16 @@
 
         function removeOrg(orgKey) {
             if (confirm("This will permanently delete this org, related applications, referrals.")) {
-                $.getJSON("/removeOrg?orgKey=" + orgKey, function (data) {
-                    $('#row' + orgKey).css('background-color', 'darkorange').fadeOut('fast');
+                $.ajax({
+                    url: "/removeOrg?orgKey=" + orgKey,
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#row' + orgKey).css('background-color', 'darkorange').fadeOut('fast');
+                    },
+                    error: function (data) {
+                        $("#errorMessage").text(data.responseJSON.message);
+                        $("#errorAlert").fadeIn(500).fadeOut(5000);
+                    }
                 });
             }
         }

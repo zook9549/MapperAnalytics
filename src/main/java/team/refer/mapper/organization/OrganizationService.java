@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import team.refer.mapper.application.Application;
+import team.refer.mapper.application.ApplicationRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -15,8 +17,9 @@ import java.util.List;
 public class OrganizationService {
 
     @Autowired
-    public OrganizationService(OrganizationRepository organizationRepository) {
+    public OrganizationService(OrganizationRepository organizationRepository, ApplicationRepository applicationRepository) {
         this.organizationRepository = organizationRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     @RequestMapping(value = "/validateUniqueOrgKey")
@@ -65,8 +68,15 @@ public class OrganizationService {
     public Organization removeOrg(@RequestParam(value = "orgKey") String orgKey) {
         Organization org = new Organization();
         org.setOrgKey(orgKey);
-        organizationRepository.delete(org);
-        getAllOrgs().remove(org);
+        int appsForOrg = applicationRepository.countApplicationByOrganization(org);
+        if(appsForOrg == 0) {
+            organizationRepository.delete(org);
+            getAllOrgs().remove(org);
+        } else {
+            throw new RuntimeException("Cannot delete organization "  + org.getOrgKey() +
+                    " since there are still " + appsForOrg + " applications still associated with it.  " +
+                    "Remove the applications from the organization before proceeding.");
+        }
         return org;
     }
 
@@ -75,4 +85,5 @@ public class OrganizationService {
     }
 
     private final OrganizationRepository organizationRepository;
+    private final ApplicationRepository applicationRepository;
 }

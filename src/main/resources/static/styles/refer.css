@@ -143,3 +143,13 @@ tr:hover {
 .navbar-inverse .navbar-nav > li > a {
     color: #cbbde2;
 }
+
+#errorAlert {
+    background-color: darkred;
+}
+#errorMessage {
+    font-size: larger;
+    color: #fff;
+    font-weight: bolder;
+
+}
