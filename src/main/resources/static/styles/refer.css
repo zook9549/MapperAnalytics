@@ -127,9 +127,16 @@ tr:hover {
 
 .navbar-inverse .navbar-brand {
     color: #cbbde2;
-    font-size: 14px;
+    padding: 0px;
+    font-size: calc(12px + 2vw);
+    padding-top:5px;
+    padding-left:10px;
 }
-
+.navbar-brand>img {
+    display:inline;
+    padding-right: 15px;
+    padding-top: 0px;
+}
 .navbar-nav {
     color: #cbbde2;
     font-size: calc(14px + 1.4vw);
@@ -137,6 +144,13 @@ tr:hover {
 @media (min-width: 768px) {
     .navbar-nav {
         font-size: 1.4vw;
+    }
+
+    #brand-label {
+        display:none;
+    }
+    .navbar-brand {
+        padding-right:0px;
     }
 }
 
@@ -164,4 +178,8 @@ tr:hover {
 .chart {
    width: 95%;
     height: 30%;
+}
+
+#logo {
+    height: 40px;
 }

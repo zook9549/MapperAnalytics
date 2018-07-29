@@ -72,7 +72,7 @@ public class MapperApplication {
         return proxy(response, "", fileName);
     }
 
-    @RequestMapping(value = "/{path:(?:admin|scripts|styles|fonts)}/{fileName:.*}")
+    @RequestMapping(value = "/{path:(?:admin|scripts|styles|fonts|images)}/{fileName:.*}")
     public byte[] proxy(HttpServletResponse response, @PathVariable String path, @PathVariable String fileName) throws IOException {
         String filePath = path + '/' + fileName;
         try {

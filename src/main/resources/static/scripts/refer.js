@@ -1,6 +1,6 @@
 function buildNav() {
     var menu = "    <nav class=\"bd-navbar navbar navbar-inverse navbar-fixed-top\">\n" +
-        "        <a class=\"navbar-brand\" href=\"#\">Team Referral</a>\n" +
+        "        <a class=\"navbar-brand\" href=\"#\"><img src=\"/images/logo.gif\" id=\"logo\" height=\"40\" alt=\"Team Referral\"><span id=\"brand-label\">Team Referral</span></a>\n" +
         "        <div class=\"navbar-header\">\n" +
         "            <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#myNavbar\">\n" +
         "                <span class=\"icon-bar\"></span>\n" +
