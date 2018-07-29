@@ -27,7 +27,7 @@ public class SourceValidationService {
 
     @RequestMapping(value = "/getHaxors")
     public Collection<MappedIP> getHaxors() {
-        return (List) mappedIPRepository.findAll();
+        return (List) mappedIPRepository.findAllByOrderByCreatedDesc();
     }
 
     @RequestMapping(value = "/toggleWhiteList")

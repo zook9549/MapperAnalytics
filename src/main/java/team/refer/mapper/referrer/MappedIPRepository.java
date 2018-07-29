@@ -19,9 +19,8 @@ public interface MappedIPRepository extends CrudRepository<MappedIP, String> {
     @Cacheable(value = "mappedIPs")
     Optional<MappedIP> findById(String s);
 
-    @Override
     @Cacheable(value = "mappedIPs")
-    Iterable<MappedIP> findAll();
+    Iterable<MappedIP> findAllByOrderByCreatedDesc();
 
     @Override
     @CacheEvict(value = "mappedIPs", allEntries = true)
