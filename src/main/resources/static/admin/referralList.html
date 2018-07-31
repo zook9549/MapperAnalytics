@@ -61,6 +61,7 @@
         function removeReferral(appKey, millis) {
             $.getJSON("/removeReferral?appKey=" + appKey + "&mappedMilliseconds=" + millis, function (data) {
                 $('#row' + millis).css('background-color', 'darkorange').fadeOut('fast');
+                $("#errorMessage").text(data.responseJSON.message);
             });
         }
 

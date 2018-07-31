@@ -6,7 +6,9 @@ body {
 form {
     padding-top: 50px;
 }
-
+.countryCode {
+    font-size: small;
+}
 .icon {
     font-size: xx-large;
 }

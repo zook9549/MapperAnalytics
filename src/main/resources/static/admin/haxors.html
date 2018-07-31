@@ -29,22 +29,26 @@
                 for (var i = 0; i < data.length; i++) {
                     haxors[i] = data[i];
                     var strippedIp = data[i].ip.replace(/\./g,'');
+                    var countryCode = data[i].country;
+                    if(countryCode == null) countryCode = "";
                     allHaxors += "<tr id='row" + strippedIp + "'>" +
-                        "<td>" + data[i].ip
-                        + "</td><td>" + data[i].created
+                        "<td class='ipAddr'>" + data[i].ip +
+                        "</td><td class='countryCode'><img src='/images/" + countryCode.toLowerCase() + ".png'/>" + countryCode + "</td>" +
+                        "</td><td>" + data[i].created;
                     if(data[i].whiteListed) {
                         allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"></span></a></td></tr>";
                     } else {
                         allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-ok\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"></span></a></td></tr>";
                     }
                 }
-                haxorList.innerHTML = "<br/><br/><br/><table class=\"table\" id='tblRegistrants'><tr><th>IP</th><th>Created</th><th>Whitelist?</th></tr>"
+                haxorList.innerHTML = "<br/><br/><br/><table class=\"table\" id='tblRegistrants'><tr><th>IP</th><th>Country</th><th>Created</th><th>Whitelist?</th></tr>"
                     + allHaxors + "</table>";
                 if (ip) {
                     $('#row' + ip.replace(/\./g,'')).effect("pulsate", {times: 4}, 400);
                 }
             });
         }
+
 
         function toggleWhiteList(ip) {
             $.getJSON("/toggleWhiteList?ip=" + ip, function (data) {
@@ -54,6 +58,7 @@
 
     </script>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet"/>
     <link href="/styles/refer.css" rel="stylesheet"/>
 </head>
 <body>
