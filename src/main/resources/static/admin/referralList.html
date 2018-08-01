@@ -47,12 +47,13 @@
                         + "</td><td>" + data[i].originalURL
                         + "</td><td>" + data[i].resultURL
                         + "</td><td>" + data[i].userName
+                        + "</td><td>" + data[i].sourceIP
                         + "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:removeReferral('" + data[i].application.appKey +
                         "','" + data[i].mappedMilliseconds + "')\"><span class=\"glyphicon glyphicon-remove-sign\" aria-hidden=\"true\"></span>" +
                         "</a></td></tr>";
                 }
                 referralList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Date/Time</th><th>Original URL</th>" +
-                    "<th>Result URL</th><th>User</th><th>Actions</th></tr>"
+                    "<th>Result URL</th><th>User</th><th>Source IP</th><th>Actions</th></tr>"
                     + allRegistrants + "</table>";
 
             });
