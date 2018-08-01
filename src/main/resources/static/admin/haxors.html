@@ -30,10 +30,13 @@
                     haxors[i] = data[i];
                     var strippedIp = data[i].ip.replace(/\./g,'');
                     var countryCode = data[i].country;
-                    if(countryCode == null) countryCode = "";
                     allHaxors += "<tr id='row" + strippedIp + "'>" +
                         "<td class='ipAddr'>" + data[i].ip +
-                        "</td><td class='countryCode'><img src='/images/" + countryCode.toLowerCase() + ".png'/>" + countryCode + "</td>" +
+                        "</td><td class='countryCode'>";
+                    if(countryCode != null) {
+                        allHaxors += "<img src='/images/" + countryCode.toLowerCase() + ".png'/>" + countryCode
+                    }
+                    allHaxors += "</td></td><td>" + data[i].count + "</td>" +
                         "</td><td>" + data[i].created;
                     if(data[i].whiteListed) {
                         allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"></span></a></td></tr>";
@@ -41,7 +44,7 @@
                         allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-ok\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"></span></a></td></tr>";
                     }
                 }
-                haxorList.innerHTML = "<br/><br/><br/><table class=\"table\" id='tblRegistrants'><tr><th>IP</th><th>Country</th><th>Created</th><th>Whitelist?</th></tr>"
+                haxorList.innerHTML = "<br/><br/><br/><table class=\"table\" id='tblRegistrants'><tr><th>IP</th><th>Country</th><th>Count</th><th>Created</th><th>Whitelist?</th></tr>"
                     + allHaxors + "</table>";
                 if (ip) {
                     $('#row' + ip.replace(/\./g,'')).effect("pulsate", {times: 4}, 400);

@@ -42,20 +42,6 @@ public class SourceValidationService {
         return mappedIP;
     }
 
-    private String test() {
-        int flagOffset = 0x1F1E6;
-        int asciiOffset = 0x41;
-
-        String country = "US";
-
-        int firstChar = Character.codePointAt(country, 0) - asciiOffset + flagOffset;
-        int secondChar = Character.codePointAt(country, 1) - asciiOffset + flagOffset;
-
-        String flag = new String(Character.toChars(firstChar))
-                + new String(Character.toChars(secondChar));
-        return flag;
-    }
-
     public boolean isValidSource(String ipAddress, String uri) {
         boolean malicious = uri.toLowerCase().matches(haxorMatch);
         MappedIP result = mappedIPRepository.findByIp(ipAddress);
@@ -64,12 +50,12 @@ public class SourceValidationService {
             LOG.warn("Malicious attempt: " + uri + " : " + result);
             mappedIPRepository.save(result);
         } else if (result != null) {
-            if(result.getCountry() == null) {
-                result.setCountry(mapCountry(ipAddress));
+            if (malicious) {
+                result.setCount(result.getCount() + 1);
                 mappedIPRepository.save(result);
-            }
-            if (result.isWhiteListed() && malicious) {
-                LOG.warn("Overriding since IP is whitelisted: " + uri + " : " + result);
+                if (result.isWhiteListed() && malicious) {
+                    LOG.warn("Overriding since IP is whitelisted: " + uri + " : " + result);
+                }
             }
             malicious = !result.isWhiteListed();
         }
@@ -89,7 +75,7 @@ public class SourceValidationService {
         String url = MessageFormat.format(apiURL, ipAddress);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> results = restTemplate.getForEntity(url, Map.class);
-        return (String)results.getBody().get("country_code");
+        return (String) results.getBody().get("country_code");
     }
 
     private final MappedIPRepository mappedIPRepository;

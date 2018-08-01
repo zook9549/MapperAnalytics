@@ -6,9 +6,11 @@ body {
 form {
     padding-top: 50px;
 }
+
 .countryCode {
     font-size: small;
 }
+
 .icon {
     font-size: xx-large;
 }
@@ -104,10 +106,6 @@ tr:hover {
     width: 100%;
 }
 
-#barchart_material {
-    padding-top: 50px;
-}
-
 .btn {
     font-size: larger;
 }
@@ -131,28 +129,32 @@ tr:hover {
     color: #cbbde2;
     padding: 0px;
     font-size: calc(12px + 2vw);
-    padding-top:5px;
-    padding-left:10px;
+    padding-top: 5px;
+    padding-left: 10px;
 }
-.navbar-brand>img {
-    display:inline;
+
+.navbar-brand > img {
+    display: inline;
     padding-right: 15px;
     padding-top: 0px;
 }
+
 .navbar-nav {
     color: #cbbde2;
     font-size: calc(14px + 1.4vw);
 }
+
 @media (min-width: 768px) {
     .navbar-nav {
         font-size: 1.4vw;
     }
 
     #brand-label {
-        display:none;
+        display: none;
     }
+
     .navbar-brand {
-        padding-right:0px;
+        padding-right: 0px;
     }
 }
 
@@ -178,7 +180,7 @@ tr:hover {
 }
 
 .chart {
-   width: 95%;
+    width: 95%;
     height: 30%;
 }
 

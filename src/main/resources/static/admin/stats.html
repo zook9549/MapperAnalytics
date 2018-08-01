@@ -1,6 +1,6 @@
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Site Statistics</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="/scripts/jquery-min.js"></script>
@@ -8,10 +8,11 @@
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/refer.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages': ['bar', 'line']});
+        google.charts.load('current', {'packages': ['bar', 'line', 'geochart'], mapsApiKey: 'AIzaSyAR2uTacvDmAK38duPE0nCOv-uN6GsXtJY'});
         google.charts.setOnLoadCallback(drawChart);
         google.charts.setOnLoadCallback(drawChartBySourceIP);
         google.charts.setOnLoadCallback(drawReferrersByApp);
+        google.charts.setOnLoadCallback(drawHaxors);
 
         $(document).ready(function () {
             buildNav();
@@ -30,10 +31,6 @@
                         data.addRow([jsonData[i].identifierGroup, jsonData[i].count]);
                     }
                     var options = {
-                        chart: {
-                            title: 'Top 10 Referring Users',
-                            subtitle: 'Year-to-date',
-                        },
                         legend: {
                             position: "none"
                         },
@@ -59,10 +56,6 @@
                         data.addRow([jsonData[i].identifierGroup, jsonData[i].count]);
                     }
                     var options = {
-                        chart: {
-                            title: 'Top 10 Referring IP Addresses',
-                            subtitle: 'Year-to-date',
-                        },
                         legend: {
                             position: "none"
                         },
@@ -76,6 +69,7 @@
         }
 
         var apps = [];
+
         function drawReferrersByApp() {
             $.ajax({
                 url: "/getReferrersByApp?start=2010-07-22&groupByDay=false",
@@ -91,7 +85,7 @@
                     for (var i = 0; i < jsonData.length; i++) {
                         data.setCell(i, 0, new Date(jsonData[i].referDate))
                         for (var j = 0; j < jsonData[i].groupReferralCounts.length; j++) {
-                            data.setCell(i, apps.indexOf(jsonData[i].groupReferralCounts[j].identifierGroup)+1, jsonData[i].groupReferralCounts[j].count)
+                            data.setCell(i, apps.indexOf(jsonData[i].groupReferralCounts[j].identifierGroup) + 1, jsonData[i].groupReferralCounts[j].count)
                         }
                     }
                     var options = {
@@ -99,13 +93,7 @@
                             title: 'Day',
                             slantedText: true
                         },
-                        vAxis: {
-                        },
-                        title: 'Referrals by Application',
-                        chart: {
-                            title: 'Referrals by Application',
-                            subtitle: 'Grouped by Day'
-                        },
+                        vAxis: {},
                         animation: {
                             duration: 200,
                             easing: 'inAndOut',
@@ -114,13 +102,56 @@
                             ignoreBounds: true
                         }
                     };
-                    var chart =new google.charts.Line(document.getElementById('linechart_material'));
+                    var chart = new google.charts.Line(document.getElementById('linechart_material'));
 
                     chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             });
         }
 
+        function drawHaxors() {
+            var countries = [];
+            var countryCount = [];
+            $.ajax({
+                url: "/getHaxors",
+                dataType: "json",
+                success: function (jsonData) {
+                    var data = new google.visualization.DataTable();
+                    for (var i = 0; i < jsonData.length; i++) {
+                        var currentCountry = jsonData[i].country;
+                        if (currentCountry != null) {
+                            var countryIndex = $.inArray(currentCountry, countries)
+                            if(countryIndex == -1) {
+                                countryIndex = countries.length;
+                                countries[countryIndex] = currentCountry;
+                            }
+                            var attackCountByIP = jsonData[i].count;
+                            if(countryCount.length >= countryIndex &&  countryCount[countryIndex] > 0) {
+                                countryCount[countryIndex] = countryCount[countryIndex] + attackCountByIP;
+                            } else {
+                                countryCount[countryIndex] = attackCountByIP;
+                            }
+                        }
+                    }
+
+                    data.addColumn('string', 'Country');
+                    data.addColumn('number', 'Attacks');
+
+                    for (var i = 0; i < countries.length; i++) {
+                        data.addRow([countries[i], countryCount[i]]);
+                    }
+
+                    var options = {
+                        datalessRegionColor: '#f8bbd0',
+                        defaultColor: '#f5f5f5',
+                        colorAxis: {colors: ['#e7711c', 'red']}
+                    };
+                    var chart = new google.visualization.GeoChart(document.getElementById('chart_haxors'));
+
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
+                }
+            });
+        }
 
     </script>
     <link href="/styles/refer.css" rel="stylesheet"/>
@@ -128,8 +159,13 @@
 <body>
 <div id="navContainer" class="container-fluid">
 </div>
-<div id="barchart_material" class="chart" >LOADING</div>
+<h3 style="padding-top:30px;padding-bottom:0px;">Top 10 Referring Users</h3>
+<div id="barchart_material" class="chart">LOADING</div>
+<h3>Top 10 Referring IP Addresses</h3>
 <div id="barchart_ip" class="chart">LOADING</div>
+<h3>Referrals By Application</h3>
 <div id="linechart_material" class="chart">LOADING</div>
+<h3>Attack Vectors By Country</h3>
+<div id="chart_haxors" class="chart">LOADING</div>
 </body>
 </html>

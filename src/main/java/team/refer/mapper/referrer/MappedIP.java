@@ -44,6 +44,14 @@ public class MappedIP {
         isWhiteListed = whiteListed;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     @Override
     public String toString() {
         return "MappedIP{" +
@@ -58,6 +66,7 @@ public class MappedIP {
     @Column(name = "SourceIP")
     private String ip;
     private String country;
+    private int count;
     @JsonFormat(pattern="yyyy-MM-dd@HH:mm")
     private Date created;
     @Column(name = "WhiteList")
