@@ -4,6 +4,7 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -67,9 +68,20 @@ public class MapperApplication {
         url.append(shortenedEmail);
         return url.toString().toLowerCase();
     }
+
     @RequestMapping(value = "/{fileName:(?:robots.txt|abuseipdb-verification.html)}")
     public byte[] proxyFile(HttpServletResponse response, @PathVariable String fileName) throws IOException {
         return proxy(response, "", fileName);
+    }
+
+    @RequestMapping(value = "/admin")
+    public void proxy(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        StringBuffer url = request.getRequestURL();
+        if (!url.toString().endsWith("/")) {
+            url.append('/');
+        }
+        url.append(defaultPage);
+        response.sendRedirect(url.toString());
     }
 
     @RequestMapping(value = "/{path:(?:admin|scripts|styles|fonts|images)}/{fileName:.*}")
@@ -196,6 +208,9 @@ public class MapperApplication {
     private OrganizationService organizationService;
     @Autowired
     private ReferralHistoryService referralHistoryService;
+
+    @Value("${default.page}")
+    private String defaultPage;
 
     private static final Logger LOG = LoggerFactory.getLogger(MapperApplication.class);
 

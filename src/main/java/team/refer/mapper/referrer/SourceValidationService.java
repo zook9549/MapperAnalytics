@@ -68,6 +68,7 @@ public class SourceValidationService {
         result.setIp(ipAddress);
         result.setWhiteListed(false);
         result.setCountry(mapCountry(ipAddress));
+        result.setCount(1);
         return result;
     }
 
