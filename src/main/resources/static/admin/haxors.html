@@ -11,6 +11,8 @@
     <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/refer.js"></script>
+    <link href="/styles/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script src="/scripts/jquery.dataTables.min.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -24,7 +26,6 @@
         function getHaxors(ip) {
             counter = 0;
             var allHaxors = "";
-            var haxorList = document.getElementById('haxorsList');
             $.getJSON("/getHaxors", function (data) {
                 for (var i = 0; i < data.length; i++) {
                     haxors[i] = data[i];
@@ -39,13 +40,18 @@
                     allHaxors += "</td></td><td>" + data[i].count + "</td>" +
                         "</td><td>" + data[i].created;
                     if(data[i].whiteListed) {
-                        allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"></span></a></td></tr>";
+                        allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"><span style='display: none;'>1</span></span></a></td></tr>";
                     } else {
-                        allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-ok\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"></span></a></td></tr>";
+                        allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-ok\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"><span style='display: none;'>0</span></span></a></td></tr>";
                     }
                 }
-                haxorList.innerHTML = "<br/><br/><br/><table class=\"table\" id='tblRegistrants'><tr><th>IP</th><th>Country</th><th>Count</th><th>Created</th><th>Whitelist?</th></tr>"
-                    + allHaxors + "</table>";
+                $('#haxorsList').html("<table class=\"table\" id='tblRegistrants'><thead><tr><th>IP</th><th>Country</th><th>Count</th><th>Created</th><th>Whitelist?</th></tr></thead><tbody>"
+                    + allHaxors + "</tbody></table>");
+                $('#tblRegistrants').DataTable({
+                    "columnDefs": [
+                        { "orderable": false, "targets": 4 }
+                    ]
+                });
                 if (ip) {
                     $('#row' + ip.replace(/\./g,'')).effect("pulsate", {times: 4}, 400);
                 }
@@ -67,6 +73,6 @@
 <body>
 <div id="navContainer" class="container-fluid">
 </div>
-<div id="haxorsList" class="table-responsive"></div>
+<div id="haxorsList" class="table-responsive main-body"></div>
 </body>
 </html>

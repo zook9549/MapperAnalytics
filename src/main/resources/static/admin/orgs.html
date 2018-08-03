@@ -12,6 +12,8 @@
     <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/refer.js"></script>
+    <link href="/styles/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script src="/scripts/jquery.dataTables.min.js"></script>
     <link href="/styles/refer.css" rel="stylesheet"/>
     <script>
 
@@ -84,12 +86,17 @@
                         "<span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a>" +
                         "</td></tr>";
                 }
-                orgList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Key</th><th>Name</th><th>URL</th><th>Default?</th><th>Actions</th></tr>"
-                    + allOrgs + "</table>";
+                orgList.innerHTML = "<table class=\"table\" id='tblRegistrants'><thead><tr><th>Key</th><th>Name</th><th>URL</th><th>Default?</th><th>Actions</th></tr></thead><tbody>"
+                    + allOrgs + "</tbody></table>";
                 if (orgKey) {
                     $('#row' + orgKey).effect("pulsate", {times: 4}, 400);
                 }
 
+                $('#tblRegistrants').DataTable({
+                    "columnDefs": [
+                        { "orderable": false, "targets": 4 }
+                    ]
+                })
             });
         }
 

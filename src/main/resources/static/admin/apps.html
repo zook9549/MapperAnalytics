@@ -10,6 +10,8 @@
     <link href="/styles/jquery.fancybox.min.css" rel="stylesheet"/>
     <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
     <script src="/scripts/bootstrap.min.js"></script>
+    <link href="/styles/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script src="/scripts/jquery.dataTables.min.js"></script>
     <script src="/scripts/refer.js"></script>
     <script>
 
@@ -88,11 +90,16 @@
                         "<span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].appKey + "\" aria-hidden=\"true\"></span></a>" +
                         "</td></tr>";
                 }
-                appList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Key</th><th>Name</th><th>Org</th><th>Default Email Domain</th><th>URL</th><th>Default?</th><th>Actions</th></tr>"
-                    + allApps + "</table>";
+                appList.innerHTML = "<table class=\"table\" id='tblRegistrants'><thead><tr><th>Key</th><th>Name</th><th>Org</th><th>Default Email Domain</th><th>URL</th><th>Default?</th><th>Actions</th></tr></thead><tbody>"
+                    + allApps + "</tbody></table>";
                 if (appKey) {
                     $('#row' + appKey).effect("pulsate", {times: 4}, 400);
                 }
+                $('#tblRegistrants').DataTable({
+                    "columnDefs": [
+                        { "orderable": false, "targets": 6 }
+                    ]
+                })
 
             });
         }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Referral History by Application</title>
     <script src="/scripts/jquery-min.js"></script>
     <script src="/scripts/jquery-ui.min.js"></script>
@@ -10,6 +10,8 @@
     <link href="/styles/jquery.fancybox.min.css" rel="stylesheet"/>
     <link href="/styles/bootstrap.min.css" rel="stylesheet"/>
     <script src="/scripts/bootstrap.min.js"></script>
+    <link href="/styles/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script src="/scripts/jquery.dataTables.min.js"></script>
     <script src="/scripts/refer.js"></script>
     <script>
 
@@ -40,7 +42,6 @@
         function fetchReferrals(appKey) {
             counter = 0;
             var allRegistrants = "";
-            var registrantList = document.getElementById('registrantList');
             $.getJSON("/getReferralsByAppKey?appKey=" + appKey, function (data) {
                 for (var i = 0; i < data.length; i++) {
                     allRegistrants += "<tr id='row" + data[i].mappedMilliseconds + "'><td>" + data[i].mappedTimeStamp
@@ -52,10 +53,14 @@
                         "','" + data[i].mappedMilliseconds + "')\"><span class=\"glyphicon glyphicon-remove-sign\" aria-hidden=\"true\"></span>" +
                         "</a></td></tr>";
                 }
-                referralList.innerHTML = "<table class=\"table\" id='tblRegistrants'><tr><th>Date/Time</th><th>Original URL</th>" +
-                    "<th>Result URL</th><th>User</th><th>Source IP</th><th>Actions</th></tr>"
-                    + allRegistrants + "</table>";
-
+                $('#referralList').html("<table class=\"table\" id='tblRegistrants'><thead><tr><th>Date/Time</th><th>Original URL</th>" +
+                    "<th>Result URL</th><th>User</th><th>Source IP</th><th>Actions</th></tr></thead><tbody>"
+                    + allRegistrants + "</tbody></table>");
+                $('#tblRegistrants').DataTable({
+                    "columnDefs": [
+                        { "orderable": false, "targets": 5 }
+                    ]
+                });
             });
         }
 
