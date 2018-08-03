@@ -8,7 +8,10 @@
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/refer.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages': ['bar', 'line', 'geochart'], mapsApiKey: 'AIzaSyAR2uTacvDmAK38duPE0nCOv-uN6GsXtJY'});
+        google.charts.load('current', {
+            'packages': ['bar', 'line', 'geochart'],
+            mapsApiKey: 'AIzaSyAR2uTacvDmAK38duPE0nCOv-uN6GsXtJY'
+        });
         google.charts.setOnLoadCallback(drawChart);
         google.charts.setOnLoadCallback(drawChartBySourceIP);
         google.charts.setOnLoadCallback(drawReferrersByApp);
@@ -121,12 +124,12 @@
                         var currentCountry = jsonData[i].country;
                         if (currentCountry != null) {
                             var countryIndex = $.inArray(currentCountry, countries)
-                            if(countryIndex == -1) {
+                            if (countryIndex == -1) {
                                 countryIndex = countries.length;
                                 countries[countryIndex] = currentCountry;
                             }
                             var attackCountByIP = jsonData[i].count;
-                            if(countryCount.length >= countryIndex &&  countryCount[countryIndex] > 0) {
+                            if (countryCount.length >= countryIndex && countryCount[countryIndex] > 0) {
                                 countryCount[countryIndex] = countryCount[countryIndex] + attackCountByIP;
                             } else {
                                 countryCount[countryIndex] = attackCountByIP;
@@ -142,9 +145,10 @@
                     }
 
                     var options = {
-                        datalessRegionColor: '#f8bbd0',
+                        datalessRegionColor: '#CCC',
                         defaultColor: '#f5f5f5',
-                        colorAxis: {colors: ['#e7711c', 'red']}
+                        colorAxis: {colors: ['pink', 'red']},
+                        legend: 'none'
                     };
                     var chart = new google.visualization.GeoChart(document.getElementById('chart_haxors'));
 
@@ -159,13 +163,51 @@
 <body>
 <div id="navContainer" class="container-fluid">
 </div>
-<h3 style="padding-top:30px;padding-bottom:0px;">Top 10 Referring Users</h3>
-<div id="barchart_material" class="chart">LOADING</div>
-<h3>Top 10 Referring IP Addresses</h3>
-<div id="barchart_ip" class="chart">LOADING</div>
-<h3>Referrals By Application</h3>
-<div id="linechart_material" class="chart">LOADING</div>
-<h3>Attack Vectors By Country</h3>
-<div id="chart_haxors" class="chart">LOADING</div>
+<div id="accordion" style="padding-top:60px;">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <a class="btn btn-link" data-toggle="collapse" href="#chart1" role="button" aria-expanded="false"
+               aria-controls="chart1">
+                Top 10 Referring Users
+            </a>
+        </div>
+        <div class="collapse" id="chart1">
+            <div id="barchart_material" class="chart">LOADING</div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading2">
+            <a class="btn btn-link" data-toggle="collapse" href="#chart2" role="button" aria-expanded="false"
+               aria-controls="chart2">
+                Top 10 Referring IP Addresses
+            </a>
+        </div>
+        <div class="collapse" id="chart2">
+            <div id="barchart_ip" class="chart">LOADING</div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading3">
+            <a class="btn btn-link" data-toggle="collapse" href="#chart3" role="button" aria-expanded="false"
+               aria-controls="chart3">
+                Referrals By Application
+            </a>
+        </div>
+        <div class="collapse" id="chart3">
+            <div id="linechart_material" class="chart">LOADING</div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading4">
+            <a class="btn btn-link" data-toggle="collapse" href="#chart4" role="button" aria-expanded="false"
+               aria-controls="chart4">
+                Attack Vectors By Country
+            </a>
+        </div>
+        <div class="collapse" id="chart4">
+            <div id="chart_haxors" class="chart">LOADING</div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
