@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Haxor View</title>
     <script src="/scripts/jquery-min.js"></script>
     <script src="/scripts/jquery-ui.min.js"></script>
@@ -29,39 +29,43 @@
             $.getJSON("/getHaxors", function (data) {
                 for (var i = 0; i < data.length; i++) {
                     haxors[i] = data[i];
-                    var strippedIp = data[i].ip.replace(/\./g,'');
+                    var strippedIp = data[i].ip.replace(/\./g, '');
                     var countryCode = data[i].country;
                     allHaxors += "<tr id='row" + strippedIp + "'>" +
                         "<td class='ipAddr'>" + data[i].ip +
                         "</td><td class='countryCode'>";
-                    if(countryCode != null) {
+                    if (countryCode != null) {
                         allHaxors += "<img src='/images/" + countryCode.toLowerCase() + ".png'/>" + countryCode
                     }
                     allHaxors += "</td></td><td>" + data[i].count + "</td>" +
-                        "</td><td>" + data[i].created;
-                    if(data[i].whiteListed) {
-                        allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"><span style='display: none;'>1</span></span></a></td></tr>";
-                    } else {
-                        allHaxors += "</td><td><a class=\"icon\" id=\"deleteAction\" href=\"javascript:toggleWhiteList('" + data[i].ip + "')\"><span class=\"glyphicon glyphicon-ok\" id=\"deleteAction" + data[i].ip + "\" aria-hidden=\"true\"><span style='display: none;'>0</span></span></a></td></tr>";
-                    }
+                        "</td><td>" + data[i].created + "</td><td>";
+                    allHaxors += mapWhiteList(data[i]);
                 }
                 $('#haxorsList').html("<table class=\"table\" id='tblRegistrants'><thead><tr><th>IP</th><th>Country</th><th>Count</th><th>Created</th><th>Whitelist?</th></tr></thead><tbody>"
-                    + allHaxors + "</tbody></table>");
-                $('#tblRegistrants').DataTable({
-                    "columnDefs": [
-                        { "orderable": false, "targets": 4 }
-                    ]
-                });
+                    + allHaxors + "</td></tr></tbody></table>");
+                $('#tblRegistrants').DataTable({});
                 if (ip) {
-                    $('#row' + ip.replace(/\./g,'')).effect("pulsate", {times: 4}, 400);
+                    $('#row' + ip.replace(/\./g, '')).effect("pulsate", {times: 4}, 400);
                 }
             });
         }
 
+        function mapWhiteList(data) {
+            console.log(data.whiteListed)
+            if (data.whiteListed) {
+                return "<a class=\"icon\" href=\"javascript:toggleWhiteList('" + data.ip + "')\"><span class=\"glyphicon glyphicon-remove-sign\" id=\"deleteAction" + data.ip + "\" aria-hidden=\"true\"><span style='display: none;'>1</span></span></a>";
+            } else {
+                return "<a class=\"icon\" href=\"javascript:toggleWhiteList('" + data.ip + "')\"><span class=\"glyphicon glyphicon-ok\" id=\"deleteAction" + data.ip + "\" aria-hidden=\"true\"><span style='display: none;'>0</span></span></a>";
+            }
+        }
 
         function toggleWhiteList(ip) {
+            console.log("Toggling " + ip);
             $.getJSON("/toggleWhiteList?ip=" + ip, function (data) {
-                getHaxors(ip)
+                var contents = mapWhiteList(data);
+                var row = $('#row' + ip.replace(/\./g, ''));
+                row.find('td').eq(4).html(contents);
+                row.effect("pulsate", {times: 4}, 400);
             });
         }
 
