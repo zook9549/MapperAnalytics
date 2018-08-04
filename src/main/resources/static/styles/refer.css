@@ -7,6 +7,10 @@ form {
     padding-top: 50px;
 }
 
+.btn {
+    width:100%;
+}
+
 .main-body {
     padding-top: 60px;
 }
@@ -124,11 +128,13 @@ tr:hover {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .05), inset 0 -1px 0 rgba(0, 0, 0, .1);
 }
 
-.bd-navbar .navbar-nav .nav-link.active, .bd-navbar .navbar-nav .nav-link:hover {
+.bd-navbar .navbar-nav .nav-link.active, .bd-navbar .navbar-nav .nav-link:hover, .dropdown-item:hover {
     color: #fff;
     background-color: transparent;
 }
-
+.dropdown-menu {
+    background-color: #563d7c;
+}
 .navbar-inverse .navbar-brand {
     color: #cbbde2;
     padding: 0px;
@@ -167,6 +173,18 @@ tr:hover {
     color: #fff;
     background-color: #563d7c;
 }
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: .25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: whitesmoke;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
 
 .navbar-inverse .navbar-nav > li > a {
     color: #cbbde2;
@@ -185,7 +203,7 @@ tr:hover {
 
 .chart {
     width: 95%;
-    height: 30%;
+    height:85%;
 }
 
 #logo {

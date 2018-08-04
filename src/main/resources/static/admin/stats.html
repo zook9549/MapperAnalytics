@@ -12,16 +12,48 @@
             'packages': ['bar', 'line', 'geochart'],
             mapsApiKey: 'AIzaSyAR2uTacvDmAK38duPE0nCOv-uN6GsXtJY'
         });
-        google.charts.setOnLoadCallback(drawChart);
-        google.charts.setOnLoadCallback(drawChartBySourceIP);
-        google.charts.setOnLoadCallback(drawReferrersByApp);
-        google.charts.setOnLoadCallback(drawHaxors);
+        var chartId = window.location.hash;
+        var intervalId;
 
         $(document).ready(function () {
             buildNav();
+            drawChart();
+            intervalId = window.setInterval(function () {
+                var currentHash = window.location.hash;
+                if(!currentHash) {
+                    currentHash = "#chart1"
+                }
+                if (currentHash != chartId) {
+                    chartId = currentHash;
+                    drawChart(currentHash);
+                }
+            }, 100);
         });
 
         function drawChart() {
+            console.log(chartId);
+
+            $("#chart1").html("LOADING...")
+
+            if("#chart1" == chartId) {
+                $("#chart-title").html("Top Referrers by User")
+                google.charts.setOnLoadCallback(drawReferrerChart);
+            } else if(chartId == "#chart2") {
+                $("#chart-title").html("Top Referrers by IP Address")
+                google.charts.setOnLoadCallback(drawChartBySourceIP);
+
+            } else if(chartId == "#chart3") {
+                $("#chart-title").html("Top Applications")
+                google.charts.setOnLoadCallback(drawReferrersByApp);
+
+            } else if(chartId == "#chart4") {
+                $("#chart-title").html("Attack Vectors by Country")
+                google.charts.setOnLoadCallback(drawHaxors);
+            }
+        }
+
+
+        function drawReferrerChart() {
             $.ajax({
                 url: "/getTopReferrers?maxRecords=10",
                 dataType: "json",
@@ -39,7 +71,7 @@
                         },
                         bars: 'vertical' // Required for Material Bar Charts.
                     };
-                    var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+                    var chart = new google.charts.Bar(document.getElementById('chart1'));
 
                     chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
@@ -64,7 +96,7 @@
                         },
                         bars: 'vertical'
                     };
-                    var chart = new google.charts.Bar(document.getElementById('barchart_ip'));
+                    var chart = new google.charts.Bar(document.getElementById('chart1'));
 
                     chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
@@ -74,6 +106,7 @@
         var apps = [];
 
         function drawReferrersByApp() {
+            console.log("drawing")
             $.ajax({
                 url: "/getReferrersByApp?start=2010-07-22&groupByDay=false",
                 dataType: "json",
@@ -105,7 +138,7 @@
                             ignoreBounds: true
                         }
                     };
-                    var chart = new google.charts.Line(document.getElementById('linechart_material'));
+                    var chart = new google.charts.Line(document.getElementById('chart1'));
 
                     chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
@@ -143,15 +176,13 @@
                     for (var i = 0; i < countries.length; i++) {
                         data.addRow([countries[i], countryCount[i]]);
                     }
-
                     var options = {
                         datalessRegionColor: '#CCC',
                         defaultColor: '#f5f5f5',
                         colorAxis: {colors: ['pink', 'red']},
                         legend: 'none'
                     };
-                    var chart = new google.visualization.GeoChart(document.getElementById('chart_haxors'));
-
+                    var chart = new google.visualization.GeoChart(document.getElementById('chart1'));
                     chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             });
@@ -163,51 +194,8 @@
 <body>
 <div id="navContainer" class="container-fluid">
 </div>
-<div id="accordion" style="padding-top:60px;">
-    <div class="card">
-        <div class="card-header" id="headingOne">
-            <a class="btn btn-link" data-toggle="collapse" href="#chart1" role="button" aria-expanded="false"
-               aria-controls="chart1">
-                Top 10 Referring Users
-            </a>
-        </div>
-        <div class="collapse" id="chart1">
-            <div id="barchart_material" class="chart">LOADING</div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="heading2">
-            <a class="btn btn-link" data-toggle="collapse" href="#chart2" role="button" aria-expanded="false"
-               aria-controls="chart2">
-                Top 10 Referring IP Addresses
-            </a>
-        </div>
-        <div class="collapse" id="chart2">
-            <div id="barchart_ip" class="chart">LOADING</div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="heading3">
-            <a class="btn btn-link" data-toggle="collapse" href="#chart3" role="button" aria-expanded="false"
-               aria-controls="chart3">
-                Referrals By Application
-            </a>
-        </div>
-        <div class="collapse" id="chart3">
-            <div id="linechart_material" class="chart">LOADING</div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="heading4">
-            <a class="btn btn-link" data-toggle="collapse" href="#chart4" role="button" aria-expanded="false"
-               aria-controls="chart4">
-                Attack Vectors By Country
-            </a>
-        </div>
-        <div class="collapse" id="chart4">
-            <div id="chart_haxors" class="chart">LOADING</div>
-        </div>
-    </div>
-</div>
+<h3 id="chart-title" style="padding-top:50px;padding-bottom:0px;"></h3>
+<div id="chart1" class="chart">LOADING</div>
+
 </body>
 </html>
