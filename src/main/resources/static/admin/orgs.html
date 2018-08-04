@@ -76,10 +76,10 @@
                         + "</td><td>" + data[i].url;
                     if (data[i].default) {
                         allOrgs += "</td><td><span class=\"icon glyphicon glyphicon-ok-circle\" title=\"" +
-                            data[i].default + "\" aria-hidden=\"true\"></span>"
+                            data[i].default + "\" aria-hidden=\"true\"><span style='display: none;'>1</span></span>"
                     } else {
                         allOrgs += "</td><td><span class=\"icon glyphicon glyphicon-remove-circle\" title=\"" +
-                            data[i].default + "\" aria-hidden=\"true\"></span>"
+                            data[i].default + "\" aria-hidden=\"true\"><span style='display: none;'>0</span></span>"
                     }
                     allOrgs += "</td><td><a class=\"icon editAction\" href=\"javascript:editOrg('" + data[i].orgKey + "')\">" +
                         "<span class=\"glyphicon glyphicon-pencil\" id=\"editAction" + data[i].orgKey + "\" aria-hidden=\"true\"></span></a><a class=\"icon deleteAction\" href=\"javascript:removeOrg('" + data[i].orgKey + "')\">" +

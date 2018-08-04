@@ -77,13 +77,13 @@
                         + "</td><td>" + data[i].organization.orgKey
                         + "</td><td>" + data[i].emailDefaultDomain +
                         "</td><td><a target=\"_blank\" class=\"icon\" href=\"" + data[i].url + "\">" +
-                        "<span class=\"glyphicon glyphicon-globe\" title=\"" + data[i].url + "\" aria-hidden=\"true\"></span></a>";
+                        "<span class=\"glyphicon glyphicon-globe\" title=\"" + data[i].url + "\" aria-hidden=\"true\"><span style='display: none;'>" + data[i].url + "</span></span></a>";
                     if (data[i].defaultApp) {
                         allApps += "</td><td><span class=\"icon glyphicon glyphicon-ok-circle\" title=\"" +
-                            data[i].defaultApp + "\" aria-hidden=\"true\"></span>"
+                            data[i].defaultApp + "\" aria-hidden=\"true\"><span style='display: none;'>1</span></span>"
                     } else {
                         allApps += "</td><td><span class=\"icon glyphicon glyphicon-remove-circle\" title=\"" +
-                            data[i].defaultApp + "\" aria-hidden=\"true\"></span>"
+                            data[i].defaultApp + "\" aria-hidden=\"true\"><span style='display: none;'>0</span></span>"
                     }
                     allApps += "</td><td><a class=\"icon\" href=\"javascript:editApp('" + data[i].appKey + "')\">" +
                         "<span class=\"glyphicon glyphicon-pencil\" id=\"editAction" + data[i].appKey + "\" aria-hidden=\"true\"></span></a><a class=\"icon\" id=\"deleteAction\" href=\"javascript:removeApp('" + data[i].appKey + "')\">" +
