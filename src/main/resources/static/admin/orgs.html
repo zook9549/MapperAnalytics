@@ -116,7 +116,9 @@
                     url: "/removeOrg?orgKey=" + orgKey,
                     dataType: 'json',
                     success: function (data) {
-                        $('#row' + orgKey).css('background-color', 'darkorange').fadeOut('fast');
+                        $('#row' + orgKey).css('background-color', 'darkorange').fadeOut('fast', function() {
+                            $('#tblRegistrants').DataTable().row($('#row' + orgKey)).remove().draw();
+                        });
                     },
                     error: function (data) {
                         $("#errorMessage").text(data.responseJSON.message);
