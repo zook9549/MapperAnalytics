@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>App Setup</title>
     <script src="/scripts/jquery-min.js"></script>
     <script src="/scripts/jquery-ui.min.js"></script>
@@ -97,7 +97,7 @@
                 }
                 $('#tblRegistrants').DataTable({
                     "columnDefs": [
-                        { "orderable": false, "targets": 6 }
+                        {"orderable": false, "targets": 6}
                     ]
                 })
 
@@ -110,28 +110,30 @@
                     $('#orgKey')
                         .append($("<option></option>")
                             .attr("value", data[i].orgKey)
-                            .text(data[i].name).attr("selected",data[i].default));
+                            .text(data[i].name).attr("selected", data[i].default));
                 }
 
             });
         }
 
         function editApp(appKey) {
-            $('#row' + appKey).each(function(){
-                $("#frmApp")[0].appKey.value=$(this).find('td').eq(0).text();
-                $("#frmApp")[0].appName.value=$(this).find('td').eq(1).text();
-                $("#frmApp")[0].orgKey.value=$(this).find('td').eq(2).text();
-                $("#frmApp")[0].appDefaultEmailDomain.value=$(this).find('td').eq(3).text();
-                $("#frmApp")[0].appURL.value=$(this).find('td').eq(4).find('span').eq(0).attr("title");
+            $('#row' + appKey).each(function () {
+                $("#frmApp")[0].appKey.value = $(this).find('td').eq(0).text();
+                $("#frmApp")[0].appName.value = $(this).find('td').eq(1).text();
+                $("#frmApp")[0].orgKey.value = $(this).find('td').eq(2).text();
+                $("#frmApp")[0].appDefaultEmailDomain.value = $(this).find('td').eq(3).text();
+                $("#frmApp")[0].appURL.value = $(this).find('td').eq(4).find('span').eq(0).attr("title");
                 var isTrueSet = ($(this).find('td').eq(5).find('span').eq(0).attr("title") === 'true');
                 $("#appDefault").prop("checked", isTrueSet)
             });
         }
 
         function removeApp(appKey) {
-            if(confirm("This will permanently delete this application and all related referrals.")) {
+            if (confirm("This will permanently delete this application and all related referrals.")) {
                 $.getJSON("/removeApp?appKey=" + appKey, function (data) {
-                    $('#row' + appKey).css('background-color', 'darkorange').fadeOut('fast');
+                    $('#row' + appKey).css('background-color', 'darkorange').fadeOut('fast', function() {
+                        $('#tblRegistrants').DataTable().row($('#row' + appKey)).remove().draw();
+                    });
                 });
             }
 
