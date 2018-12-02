@@ -123,72 +123,6 @@ tr:hover {
     background-color: #563d7c;
 }
 
-.bd-navbar {
-    background-color: #563d7c;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .05), inset 0 -1px 0 rgba(0, 0, 0, .1);
-}
-
-.bd-navbar .navbar-nav .nav-link.active, .bd-navbar .navbar-nav .nav-link:hover, .dropdown-item:hover {
-    color: #fff;
-    background-color: transparent;
-}
-.dropdown-menu {
-    background-color: #563d7c;
-}
-.navbar-inverse .navbar-brand {
-    color: #cbbde2;
-    padding: 0px;
-    font-size: calc(12px + 2vw);
-    padding-top: 5px;
-    padding-left: 10px;
-}
-
-.navbar-brand > img {
-    display: inline;
-    padding-right: 15px;
-    padding-top: 0px;
-}
-
-.navbar-nav {
-    color: #cbbde2;
-    font-size: calc(14px + 1.4vw);
-}
-
-@media (min-width: 768px) {
-    .navbar-nav {
-        font-size: 1.4vw;
-    }
-
-    #brand-label {
-        display: none;
-    }
-
-    .navbar-brand {
-        padding-right: 0px;
-    }
-}
-
-.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
-    font-weight: bolder;
-    color: #fff;
-    background-color: #563d7c;
-}
-.dropdown-item {
-    display: block;
-    width: 100%;
-    padding: .25rem 1.5rem;
-    clear: both;
-    font-weight: 400;
-    color: whitesmoke;
-    text-align: inherit;
-    white-space: nowrap;
-    background-color: transparent;
-    border: 0;
-}
-
-.navbar-inverse .navbar-nav > li > a {
-    color: #cbbde2;
-}
 
 #errorAlert {
     background-color: darkred;
@@ -210,6 +144,6 @@ tr:hover {
     height: 40px;
 }
 
-table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting_desc_disabled:after {    bottom: .5em;
-bottom: .5em;
+table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting_desc_disabled:after {
+    bottom: .5em;
 }
